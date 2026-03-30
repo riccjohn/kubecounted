@@ -12,7 +12,7 @@ const redisClient = createClient({
 }).on('error', (error) => console.log(`Redis Client Error: ${error}`));
 
 app.get('/', async (_req, res) => {
-	const count = await redisClient.get('hitCount');
+	const count = await redisClient.get('hitCount') ?? 0;
 	res.send(`Hit Count: ${count}. Hostname: ${os.hostname()}`);
 });
 
