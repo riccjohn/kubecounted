@@ -1,6 +1,7 @@
 const express = require('express');
 const redis = require('redis');
 
+const os = require('os');
 const app = express();
 const PORT = 3000;
 
@@ -12,7 +13,7 @@ const redisClient = createClient({
 
 app.get('/', async (_req, res) => {
 	const count = await redisClient.get('hitCount');
-	res.send(`Hit Count: ${count}`);
+	res.send(`Hit Count: ${count}. Hostname: ${os.hostname()}`);
 });
 
 app.post('/hit', async (_req, res) => {
