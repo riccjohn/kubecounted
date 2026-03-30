@@ -1,0 +1,12 @@
+services:
+  redis:
+    image: redis:alpine
+
+  express:
+    depends_on:
+    - redis
+    environment:
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "3000:3000"
+    build: .

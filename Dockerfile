@@ -8,6 +8,6 @@ RUN pnpm install --frozen-lockfile --prod
 FROM node:alpine AS runner
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY src ./
+COPY src ./src
 EXPOSE 3000
 CMD ["node", "src/app.js"]

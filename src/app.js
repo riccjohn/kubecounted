@@ -6,9 +6,9 @@ const PORT = 3000;
 
 const createClient = redis.createClient;
 
-const redisClient = createClient().on('error', (error) =>
-	console.log(`Redis Client Error: ${error}`),
-);
+const redisClient = createClient({
+	url: process.env.REDIS_URL || 'redis://localhost:6379',
+}).on('error', (error) => console.log(`Redis Client Error: ${error}`));
 
 app.get('/', async (_req, res) => {
 	const count = await redisClient.get('hitCount');
@@ -27,7 +27,6 @@ app.post('/reset', async (_req, res) => {
 
 const main = async () => {
 	await redisClient.connect();
-	await redisClient.set('hitCount', 0);
 	app.listen(PORT, () => {
 		console.log(`Kubecounter listening on PORT ${PORT}`);
 	});
