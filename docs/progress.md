@@ -33,8 +33,8 @@
 
 - [x] Install an Ingress Controller
 - [x] Write an Ingress manifest
-- [ ] Add a second service and route via the same Ingress
-- [ ] Update `/etc/hosts` to point hostnames at minikube IP (using minikube tunnel + Host header instead)
+- [x] Add a second service and route via the same Ingress
+- [x] Update `/etc/hosts` to point hostnames at minikube IP (using minikube tunnel + Host header instead)
 
 ## Phase 6: CI/CD Pipeline
 
