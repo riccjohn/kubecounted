@@ -34,6 +34,7 @@ app.post('/hit', async (_req, res) => {
 });
 
 app.post('/reset', async (_req, res) => {
+	await redisClient.set('hitCount', 0);
 	res.send(`Count reset to 0`);
 });
 

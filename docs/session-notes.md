@@ -2,11 +2,14 @@
 
 ## Where we left off
 
-Completed Phases 1-5 fully. Up next: Phase 6 (CI/CD Pipeline).
+Completed Phases 1-6. Up next: Phase 7 (Observability) — stretch goal.
 
-### Phase 6 starting point
-- User has prior GitHub Actions experience
-- **Next step:** push project to GitHub, then set up a GitHub Actions workflow to build and push the Docker image, then automate deployment to the cluster
+### Phase 6 notes
+- CI workflow builds and pushes image to GHCR on push to `main`
+- Tagged with both `latest` and the commit SHA for traceability
+- CD skipped — minikube runs locally and is unreachable from GitHub Actions runners
+- `imagePullPolicy` changed from `Never` to `IfNotPresent` — cluster now pulls from GHCR
+- Discussed GitOps/ArgoCD as an alternative pull-based CD model (not implemented)
 
 ### Key context
 - minikube is the local K8s cluster

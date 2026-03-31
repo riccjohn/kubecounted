@@ -38,9 +38,9 @@
 
 ## Phase 6: CI/CD Pipeline
 
-- [ ] Push project to GitHub
-- [ ] Set up GitHub Actions workflow for image build & push
-- [ ] Automate deployment to cluster
+- [x] Push project to GitHub
+- [x] Set up GitHub Actions workflow for image build & push
+- [~] Automate deployment to cluster (skipped — minikube is local, unreachable from CI; CD is manual via `kubectl apply`)
 
 ## Phase 7: Observability (Stretch)
 
