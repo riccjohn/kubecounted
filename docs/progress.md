@@ -17,17 +17,17 @@
 
 ## Phase 3: Scaling & Load Balancing
 
-- [ ] Scale the app to 3 replicas
-- [ ] Verify hostnames rotate across requests
-- [ ] Verify hit count is consistent across pods
-- [ ] Verify deleted pods are automatically recreated
+- [x] Scale the app to 3 replicas
+- [x] Verify hostnames rotate across requests
+- [x] Verify hit count is consistent across pods
+- [x] Verify deleted pods are automatically recreated
 
 ## Phase 4: Health Checks & Resilience
 
-- [ ] Add `GET /health` endpoint
-- [ ] Add readiness probe
-- [ ] Add liveness probe
-- [ ] Test by killing the Redis pod
+- [x] Add `GET /health` endpoint
+- [x] Add readiness probe
+- [x] Add liveness probe
+- [x] Test by killing the Redis pod
 
 ## Phase 5: Ingress & Routing
 
