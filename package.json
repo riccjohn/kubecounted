@@ -2,10 +2,10 @@
   "name": "kubecounted",
   "version": "1.0.0",
   "description": "",
-  "license": "ISC",
+  "license": "UNLICENSED",
   "author": "",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "src/app.js",
   "directories": {
     "doc": "docs"
   },

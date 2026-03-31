@@ -18,6 +18,7 @@ A Redis-backed hit counter API built with Express, used as a vehicle for learnin
 
 ## Prerequisites
 
+- [Node.js](https://nodejs.org/) and [pnpm](https://pnpm.io/) (for local development outside Docker)
 - [Docker](https://docs.docker.com/get-docker/)
 - [minikube](https://minikube.sigs.k8s.io/docs/start/) (for Kubernetes)
 
