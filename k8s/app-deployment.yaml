@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubecounted
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kubecounted
+  template:
+    metadata:
+      labels:
+        app: kubecounted
+    spec:
+      containers:
+        - name: kubecounted
+          image: kubecounted
+          imagePullPolicy: Never
+          env:
+            - name: REDIS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: kubecounted-config
+                  key: REDIS_URL
