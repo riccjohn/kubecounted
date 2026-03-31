@@ -61,6 +61,22 @@ kubectl apply -f k8s/
 kubectl get pods
 ```
 
+### Ingress
+
+Enable the ingress addon (one-time setup):
+
+```bash
+minikube addons enable ingress
+```
+
+Add the following entries to `/etc/hosts`:
+
+```
+$(minikube ip)  hit-counter.local
+```
+
+The app will then be available at `http://hit-counter.local`.
+
 ### Stopping
 
 ```bash

@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubecounted-ingress
+spec:
+  rules:
+    - host: hit-counter.local
+      http:
+        paths:
+          - pathType: Prefix
+            path: '/'
+            backend:
+              service:
+                name: kubecounted
+                port:
+                  number: 3000
