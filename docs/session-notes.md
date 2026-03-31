@@ -5,7 +5,8 @@
 Completed Phases 1-6. Up next: Phase 7 (Observability) — stretch goal.
 
 ### Phase 6 notes
-- CI workflow builds and pushes image to GHCR on push to `main`
+- CI workflow builds and pushes image to GHCR on push to `main` — confirmed working
+- Required enabling "Read and write permissions" under repo Settings → Actions → General → Workflow permissions
 - Tagged with both `latest` and the commit SHA for traceability
 - CD skipped — minikube runs locally and is unreachable from GitHub Actions runners
 - `imagePullPolicy` changed from `Never` to `IfNotPresent` — cluster now pulls from GHCR
