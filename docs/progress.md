@@ -46,6 +46,6 @@
 ## Phase 7: Observability (Stretch)
 
 - [ ] Install Prometheus and Grafana via Helm
-- [ ] Add `/metrics` endpoint
+- [x] Add `/metrics` endpoint (prom-client, collectDefaultMetrics, GET /metrics)
 - [ ] Configure Prometheus scraping
 - [ ] Build Grafana dashboard
