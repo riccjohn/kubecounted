@@ -271,6 +271,14 @@ Instead of CI *pushing* changes to the cluster, ArgoCD *pulls* desired state fro
 
 ---
 
+## Side Tasks
+
+These are practical improvements to the dev workflow, to be done outside of the core learning phases:
+
+- **Docker Compose dev setup** — update `docker-compose.yaml` so `docker compose up -d` is the only dev command needed. Express service should use a bind mount for local source (not copy it into the image) and run `nodemon` for hot reload. Redis already runs via Compose. Goal: remove the need for `pnpm dev` entirely.
+
+---
+
 ## What Comes After
 
 Once you've completed this path, natural next steps include:
