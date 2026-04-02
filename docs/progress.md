@@ -45,7 +45,13 @@
 
 ## Phase 7: Observability (Stretch)
 
-- [ ] Install Prometheus and Grafana via Helm
+- [~] Install Prometheus and Grafana via Helm (done manually via `helm install` — needs Helmfile)
 - [x] Add `/metrics` endpoint (prom-client, collectDefaultMetrics, GET /metrics)
-- [ ] Configure Prometheus scraping
+- [x] Write a `helmfile.yaml` to codify the Helm release (install Helmfile first: `brew install helmfile`)
+- [ ] Configure Prometheus scraping (ServiceMonitor manifest)
 - [ ] Build Grafana dashboard
+
+### Notes
+- `kube-prometheus-stack` is already running in the cluster in the `monitoring` namespace — deployed manually this session
+- Helmfile is the `package.json` equivalent for Helm — makes the setup reproducible and visible in the repo
+- Next session: install Helmfile, write `helmfile.yaml`, then move on to ServiceMonitor

@@ -21,6 +21,8 @@ A Redis-backed hit counter API built with Express, used as a vehicle for learnin
 - [Node.js](https://nodejs.org/) and [pnpm](https://pnpm.io/) (for local development outside Docker)
 - [Docker](https://docs.docker.com/get-docker/)
 - [minikube](https://minikube.sigs.k8s.io/docs/start/) (for Kubernetes)
+- [Helm](https://helm.sh/docs/intro/install/) (for installing the monitoring stack)
+- [Helmfile](https://helmfile.readthedocs.io/) (for declarative Helm release management: `brew install helmfile`)
 
 ## Running with Docker Compose
 
@@ -107,6 +109,27 @@ Pushing to `main` triggers a GitHub Actions workflow that builds the Docker imag
 
 ```bash
 kubectl rollout restart deployment/kubecounted
+```
+
+## Monitoring
+
+The monitoring stack (Prometheus + Grafana) is managed via Helmfile. Install the prerequisites first:
+
+```bash
+brew install helmfile
+helm plugin install https://github.com/databus23/helm-diff --verify=false
+```
+
+Then install the stack:
+
+```bash
+helmfile apply -f helm/helmfile.yaml
+```
+
+To preview changes without applying:
+
+```bash
+helmfile diff -f helm/helmfile.yaml
 ```
 
 ## API
