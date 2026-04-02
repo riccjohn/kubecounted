@@ -38,7 +38,7 @@ app.get('/health', async (_req, res) => {
 });
 
 app.get('/metrics', async (_req, res) => {
-	res.header(register.contentType).send(await register.metrics())
+	res.header('Content-Type', register.contentType).send(await register.metrics())
 });
 
 // POST routes
