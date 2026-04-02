@@ -48,7 +48,7 @@
 - [~] Install Prometheus and Grafana via Helm (done manually via `helm install` — needs Helmfile)
 - [x] Add `/metrics` endpoint (prom-client, collectDefaultMetrics, GET /metrics)
 - [x] Write a `helmfile.yaml` to codify the Helm release (install Helmfile first: `brew install helmfile`)
-- [ ] Configure Prometheus scraping (ServiceMonitor manifest)
+- [x] Configure Prometheus scraping (ServiceMonitor with `release: monitoring` label; added `app: kubecounted` label and named port `web` to Service so ServiceMonitor could match it)
 - [ ] Build Grafana dashboard
 
 ### Notes

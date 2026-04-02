@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: kubecounted
-          image: ghcr.io/jriccardi/kubecounted:latest
+          image: ghcr.io/riccjohn/kubecounted:latest
           imagePullPolicy: Always
           env:
             - name: REDIS_URL
