@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: kubecounted
-          image: kubecounted
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/jriccardi/kubecounted:latest
+          imagePullPolicy: Always
           env:
             - name: REDIS_URL
               valueFrom:
