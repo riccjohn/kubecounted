@@ -1,12 +1,13 @@
 # kubecounted
 
+![CI](https://github.com/riccjohn/kubecounted/actions/workflows/deploy.yml/badge.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-000000?logo=express&logoColor=white)
 ![Redis](https://img.shields.io/badge/Redis-DC382D?logo=redis&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?logo=kubernetes&logoColor=white)
 
-A Redis-backed hit counter API built with Express, used as a vehicle for learning Docker and Kubernetes — multi-replica deployments, ConfigMaps, health probes, and Ingress routing.
+A Redis-backed hit counter API built to explore real platform engineering patterns end-to-end — from containerization and multi-replica Kubernetes deployments, to a full CI/CD pipeline, to a live observability stack with Prometheus and Grafana.
 
 ![Grafana Dashboard screenshot showing requests/sec, p99 latency, and Redis connection panels](docs/assets/Dashboard_Screenshot.png)
 *Grafana dashboard screenshot — requests/sec by route, p99 latency, and Redis connection health.*
@@ -14,10 +15,10 @@ A Redis-backed hit counter API built with Express, used as a vehicle for learnin
 ## What this covers
 
 - **Docker** — multi-stage build to keep the production image minimal; Docker Compose for local development
-- **Kubernetes** — Deployments, Services, ConfigMaps, multi-replica scaling, and self-healing
-- **Health probes** — readiness and liveness probes backed by a real `/health` endpoint that checks Redis connectivity
+- **Kubernetes** — Deployments, Services, ConfigMaps, multi-replica scaling, self-healing, readiness and liveness probes
 - **Ingress** — host-based routing via a single nginx Ingress Controller (`hit-counter.local` and `hello.local`)
-- **CI** — GitHub Actions workflow that builds and pushes the image to GHCR on every push to `main`, tagged by commit SHA for traceability
+- **CI/CD** — GitHub Actions builds and pushes the image to GHCR on every push to `main`, tagged with both `latest` and the commit SHA for traceability
+- **Observability** — Prometheus scrapes custom app metrics (request counter, latency histogram, Redis connection gauge) via a ServiceMonitor; Helmfile codifies the entire monitoring stack as code; Grafana dashboard visualizes requests/sec, p99 latency, and Redis health
 
 ## Prerequisites
 
@@ -37,8 +38,6 @@ docker compose up --build
 
 The app will be available at `http://localhost:3000`.
 
-### Stopping
-
 ```bash
 docker compose down
 ```
@@ -51,25 +50,18 @@ docker compose down
 minikube start
 ```
 
-### Local development
-
-Build the image inside minikube's Docker environment so the cluster can find it locally without pulling from a registry:
-
-```bash
-eval $(minikube docker-env)
-docker build -t kubecounted .
-```
-
-`eval $(minikube docker-env)` only affects the current terminal session. To revert:
-
-```bash
-eval $(minikube docker-env --unset)
-```
-
 ### Deploying
+
+Apply all manifests at once:
 
 ```bash
 kubectl apply -f k8s/
+```
+
+The app image is pulled from GHCR (`ghcr.io/riccjohn/kubecounted:latest`). To pick up a new image after a CI build:
+
+```bash
+kubectl rollout restart deployment/kubecounted
 ```
 
 ### Checking status
@@ -106,24 +98,16 @@ kubectl delete -f k8s/
 minikube stop
 ```
 
-## CI / Image Publishing
-
-Pushing to `main` triggers a GitHub Actions workflow that builds the Docker image and pushes it to GitHub Container Registry (GHCR) tagged with both `latest` and the commit SHA. To pick up a new image in your local cluster, restart the affected pods:
-
-```bash
-kubectl rollout restart deployment/kubecounted
-```
-
 ## Monitoring
 
-The monitoring stack (Prometheus + Grafana) is managed via Helmfile. Install the prerequisites first:
+The monitoring stack (Prometheus + Grafana via `kube-prometheus-stack`) is managed declaratively with Helmfile. Install the prerequisites first:
 
 ```bash
 brew install helmfile
 helm plugin install https://github.com/databus23/helm-diff --verify=false
 ```
 
-Then install the stack:
+Deploy the stack:
 
 ```bash
 helmfile apply -f helm/helmfile.yaml
@@ -134,6 +118,14 @@ To preview changes without applying:
 ```bash
 helmfile diff -f helm/helmfile.yaml
 ```
+
+Access Grafana (default credentials: `admin` / `prom-operator`):
+
+```bash
+kubectl port-forward svc/monitoring-grafana -n monitoring 3001:80
+```
+
+Then open `http://localhost:3001`.
 
 ## API
 
