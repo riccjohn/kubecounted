@@ -49,8 +49,8 @@
 - [x] Add `/metrics` endpoint (prom-client, collectDefaultMetrics + custom counter)
 - [x] Write a `helmfile.yaml` to codify the Helm release
 - [x] Configure Prometheus scraping (ServiceMonitor with `release: monitoring` label; added `app: kubecounted` label and named port `web` to Service)
-- [~] Add custom metrics: request counter done (http_requests_total with method/route labels) — latency histogram and Redis connection gauge still needed
-- [ ] Build Grafana dashboard (requests/sec, latency percentiles, pod health)
+- [x] Add custom metrics: http_requests_total (Counter), http_request_duration_seconds (Histogram), redis_connected (Gauge)
+- [x] Build Grafana dashboard (requests/sec by route, p99 latency by route, Redis connection health)
 
 ### Notes
 - `kube-prometheus-stack` is running in the `monitoring` namespace
