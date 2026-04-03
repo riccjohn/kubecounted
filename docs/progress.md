@@ -46,10 +46,10 @@
 ## Phase 7: Observability (Stretch)
 
 - [x] Install Prometheus and Grafana via Helm (codified in `helmfile.yaml`)
-- [~] Add `/metrics` endpoint (prom-client, collectDefaultMetrics only — custom metrics still needed: request counter, latency histogram, Redis gauge)
+- [x] Add `/metrics` endpoint (prom-client, collectDefaultMetrics + custom counter)
 - [x] Write a `helmfile.yaml` to codify the Helm release
 - [x] Configure Prometheus scraping (ServiceMonitor with `release: monitoring` label; added `app: kubecounted` label and named port `web` to Service)
-- [ ] Add custom metrics: request count (by route/method), latency histogram, Redis connection gauge
+- [~] Add custom metrics: request counter done (http_requests_total with method/route labels) — latency histogram and Redis connection gauge still needed
 - [ ] Build Grafana dashboard (requests/sec, latency percentiles, pod health)
 
 ### Notes

@@ -2,16 +2,23 @@
 
 ## Where we left off
 
-Working through Phase 7 (Observability). Custom metrics still need to be added to the app before the Grafana dashboard can be built.
+Working through Phase 7 (Observability). `http_requests_total` counter is complete. Next: latency histogram, then Redis connection gauge, then Grafana dashboard.
 
 ### Phase 7 notes
 - `kube-prometheus-stack` installed in `monitoring` namespace via `helm install` (now codified in `helmfile.yaml`)
-- `/metrics` endpoint added using `prom-client` — currently only exposes default Node.js/process metrics via `collectDefaultMetrics`
 - ServiceMonitor was not working initially — fixed by adding `release: monitoring` label (so Prometheus Operator picks it up), adding `app: kubecounted` label to the Service, and naming the port `web` (required for ServiceMonitor endpoint selector)
 - All 3 app pods confirmed UP in Prometheus targets UI
-- Grafana data source (Prometheus) is pre-configured by `kube-prometheus-stack` — no manual setup needed
-- Grafana default credentials are stored in the `monitoring-grafana` Secret: `kubectl get secret monitoring-grafana -n monitoring -o jsonpath="{.data.admin-password}" | base64 --decode`
-- Next: add custom metrics to `app.js` (request counter by route/method, latency histogram, Redis connection gauge), then build Grafana dashboard
+- Grafana accessible at `localhost:3001` via `kubectl port-forward svc/monitoring-grafana -n monitoring 3001:80`
+- Grafana credentials in the `monitoring-grafana` Secret: `kubectl get secret monitoring-grafana -n monitoring -o jsonpath="{.data.admin-password}" | base64 --decode`
+- Grafana data source (Prometheus) pre-configured by `kube-prometheus-stack` — no manual setup needed
+- `deploy.yml` updated with path filters so CI only triggers on changes to `src/`, `package.json`, `pnpm-lock.yaml`, or `Dockerfile`
+
+### Custom metrics status (app.js)
+- `http_requests_total` Counter: COMPLETE — `labelNames: ['method', 'route']`, `registers: [register]`, middleware destructures `req` and calls `.inc({ method, route: path })`; `_res` unused so prefixed with underscore
+- Custom registry (`new Registry()`) used instead of global default; `collectDefaultMetrics` scoped to it; `/metrics` route serves from it
+- Latency histogram: not started — explain histogram concept (buckets, _sum, _count, _bucket) before user implements
+- Redis connection gauge: not started — explain gauge concept (up/down value, not cumulative) before user implements
+- Next: latency histogram first
 
 ## Phase 6 notes
 

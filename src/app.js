@@ -2,7 +2,7 @@ const express = require('express');
 const redis = require('redis');
 const promClient = require('prom-client');
 
-const os = require('os');
+const os = require('node:os');
 const app = express();
 const PORT = 3000;
 
@@ -12,6 +12,25 @@ const PORT = 3000;
 const { Registry, collectDefaultMetrics } = promClient;
 const register = new Registry();
 collectDefaultMetrics({ register });
+const prometheusCounter = new promClient.Counter({
+	name: 'http_requests_total',
+	help: 'Total number of HTTP requests',
+	labelNames: ['method', 'route'],
+	registers: [register],
+});
+
+const prometheusLatencyHistogram = new promClient.Histogram({
+	name: 'http_request_duration_seconds',
+	help: 'Latency of HTTP requests',
+	labelNames: ['method', 'route'],
+	registers: [register],
+});
+
+const prometheusRedisConnectionGauge = new promClient.Gauge({
+	name: 'redis_connected',
+	help: 'Redis client connection state',
+	registers: [register],
+});
 
 /*
  * REDIS CLIENT
@@ -20,10 +39,36 @@ const createClient = redis.createClient;
 
 const redisClient = createClient({
 	url: process.env.REDIS_URL || 'redis://localhost:6379',
-}).on('error', (error) => console.log(`Redis Client Error: ${error}`));
+})
+	.on('error', (error) => {
+		console.log(`Redis Client Error: ${error}`)
+		prometheusRedisConnectionGauge.set(0)
+	})
+	.on('connect', () => {
+		prometheusRedisConnectionGauge.set(1);
+	})
+	.on('end', () => {
+		prometheusRedisConnectionGauge.set(0)
+	})
 
-// GET routes
+/*
+ ** Middleware
+ */
 
+app.use((req, res, next) => {
+	const { method, path } = req;
+	const finishRequest = prometheusLatencyHistogram.startTimer({
+		method,
+		route: path,
+	});
+	prometheusCounter.inc({ method, route: path });
+	res.on('finish', finishRequest);
+	next();
+});
+
+/*
+ ** GET routes
+ */
 app.get('/', async (_req, res) => {
 	const count = (await redisClient.get('hitCount')) ?? 0;
 	res.send(`Hit Count: ${count}. Hostname: ${os.hostname()}`);
@@ -38,10 +83,14 @@ app.get('/health', async (_req, res) => {
 });
 
 app.get('/metrics', async (_req, res) => {
-	res.header('Content-Type', register.contentType).send(await register.metrics())
+	res
+		.header('Content-Type', register.contentType)
+		.send(await register.metrics());
 });
 
-// POST routes
+/*
+ ** POST routes
+ */
 
 app.post('/hit', async (_req, res) => {
 	const count = await redisClient.incr('hitCount');
