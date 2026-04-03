@@ -45,13 +45,15 @@
 
 ## Phase 7: Observability (Stretch)
 
-- [~] Install Prometheus and Grafana via Helm (done manually via `helm install` — needs Helmfile)
-- [x] Add `/metrics` endpoint (prom-client, collectDefaultMetrics, GET /metrics)
-- [x] Write a `helmfile.yaml` to codify the Helm release (install Helmfile first: `brew install helmfile`)
-- [x] Configure Prometheus scraping (ServiceMonitor with `release: monitoring` label; added `app: kubecounted` label and named port `web` to Service so ServiceMonitor could match it)
-- [ ] Build Grafana dashboard
+- [x] Install Prometheus and Grafana via Helm (codified in `helmfile.yaml`)
+- [~] Add `/metrics` endpoint (prom-client, collectDefaultMetrics only — custom metrics still needed: request counter, latency histogram, Redis gauge)
+- [x] Write a `helmfile.yaml` to codify the Helm release
+- [x] Configure Prometheus scraping (ServiceMonitor with `release: monitoring` label; added `app: kubecounted` label and named port `web` to Service)
+- [ ] Add custom metrics: request count (by route/method), latency histogram, Redis connection gauge
+- [ ] Build Grafana dashboard (requests/sec, latency percentiles, pod health)
 
 ### Notes
-- `kube-prometheus-stack` is already running in the cluster in the `monitoring` namespace — deployed manually this session
-- Helmfile is the `package.json` equivalent for Helm — makes the setup reproducible and visible in the repo
-- Next session: install Helmfile, write `helmfile.yaml`, then move on to ServiceMonitor
+- `kube-prometheus-stack` is running in the `monitoring` namespace
+- Prometheus confirmed scraping all 3 app pods (UP in targets UI)
+- Grafana data source (Prometheus) pre-configured by `kube-prometheus-stack`
+- Custom metrics must be added to the app before the Grafana dashboard is meaningful

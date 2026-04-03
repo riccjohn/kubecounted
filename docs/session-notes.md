@@ -2,7 +2,18 @@
 
 ## Where we left off
 
-Completed Phases 1-6. Up next: Phase 7 (Observability) — stretch goal.
+Working through Phase 7 (Observability). Custom metrics still need to be added to the app before the Grafana dashboard can be built.
+
+### Phase 7 notes
+- `kube-prometheus-stack` installed in `monitoring` namespace via `helm install` (now codified in `helmfile.yaml`)
+- `/metrics` endpoint added using `prom-client` — currently only exposes default Node.js/process metrics via `collectDefaultMetrics`
+- ServiceMonitor was not working initially — fixed by adding `release: monitoring` label (so Prometheus Operator picks it up), adding `app: kubecounted` label to the Service, and naming the port `web` (required for ServiceMonitor endpoint selector)
+- All 3 app pods confirmed UP in Prometheus targets UI
+- Grafana data source (Prometheus) is pre-configured by `kube-prometheus-stack` — no manual setup needed
+- Grafana default credentials are stored in the `monitoring-grafana` Secret: `kubectl get secret monitoring-grafana -n monitoring -o jsonpath="{.data.admin-password}" | base64 --decode`
+- Next: add custom metrics to `app.js` (request counter by route/method, latency histogram, Redis connection gauge), then build Grafana dashboard
+
+## Phase 6 notes
 
 ### Phase 6 notes
 - CI workflow builds and pushes image to GHCR on push to `main` — confirmed working

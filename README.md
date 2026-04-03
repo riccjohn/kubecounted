@@ -138,6 +138,7 @@ helmfile diff -f helm/helmfile.yaml
 |--------|------|-------------|
 | GET | `/` | Returns the current hit count and hostname |
 | GET | `/health` | Returns `200 OK` if Redis is reachable, `503` otherwise |
+| GET | `/metrics` | Returns Prometheus-format metrics |
 | POST | `/hit` | Increments the hit count |
 | POST | `/reset` | Resets the hit count to 0 |
 
