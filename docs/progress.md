@@ -41,7 +41,7 @@
 - [x] Push project to GitHub
 - [x] Set up GitHub Actions workflow for image build & push
 - [~] Automate deployment to cluster (skipped — minikube is local, unreachable from CI; CD is manual via `kubectl apply`)
-- [ ] Verify minikube pulls image from GHCR instead of local build (check package visibility, run `kubectl rollout restart deployment/kubecounted`, confirm app responds)
+- [x] Verify minikube pulls image from GHCR instead of local build (check package visibility, run `kubectl rollout restart deployment/kubecounted`, confirm app responds)
 
 ## Phase 7: Observability (Stretch)
 
