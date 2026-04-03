@@ -8,6 +8,9 @@
 
 A Redis-backed hit counter API built with Express, used as a vehicle for learning Docker and Kubernetes — multi-replica deployments, ConfigMaps, health probes, and Ingress routing.
 
+![Grafana Dashboard screenshot showing requests/sec, p99 latency, and Redis connection panels](docs/assets/Dashboard_Screenshot.png)
+*Grafana dashboard screenshot — requests/sec by route, p99 latency, and Redis connection health.*
+
 ## What this covers
 
 - **Docker** — multi-stage build to keep the production image minimal; Docker Compose for local development
